@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimización Algorítmica - Rappi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #00c853;
+            text-align: center;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #00c853;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #009624;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .result {
+            background: #f9f9f9;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #00c853;
+        }
+        .algoritmo {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .comparacion-link {
+            display: block;
+            text-align: center;
+            margin: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Optimización Algorítmica del Manejo de Pedidos en Rappi</h1>
+        
+        <div class="section">
+            <h2>Generar Datos de Prueba</h2>
+            <div class="algoritmo">
+                <input type="number" id="cantidad" value="100" min="10" max="10000">
+                <button onclick="generarPedidos()">Generar Pedidos</button>
+                <span id="resultado-generacion"></span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Algoritmos de Búsqueda</h2>
+            
+            <h3>Búsqueda Lineal O(n)</h3>
+            <div class="algoritmo">
+                <input type="number" id="repartidor_id" placeholder="ID Repartidor" value="150">
+                <button onclick="busquedaLineal()">Ejecutar Búsqueda Lineal</button>
+            </div>
+            <div id="resultado-lineal" class="result"></div>
+
+            <h3>Búsqueda Binaria O(log n)</h3>
+            <div class="algoritmo">
+                <input type="number" id="pedido_id" placeholder="ID Pedido" value="50">
+                <button onclick="busquedaBinaria()">Ejecutar Búsqueda Binaria</button>
+            </div>
+            <div id="resultado-binaria" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h2>Algoritmos de Ordenamiento</h2>
+            
+            <h3>Ordenamiento Burbuja O(n²)</h3>
+            <div class="algoritmo">
+                <button onclick="ordenamientoBurbuja()">Ejecutar Ordenamiento Burbuja</button>
+            </div>
+            <div id="resultado-burbuja" class="result"></div>
+
+            <h3>Ordenamiento por Inserción O(n²)</h3>
+            <div class="algoritmo">
+                <button onclick="ordenamientoInsercion()">Ejecutar Ordenamiento por Inserción</button>
+            </div>
+            <div id="resultado-insercion" class="result"></div>
+        </div>
+
+        <a href="/comparar_algoritmos" class="comparacion-link">Ver Comparación Gráfica de Algoritmos</a>
+    </div>
+
+    <script>
+        function generarPedidos() {
+            const cantidad = document.getElementById('cantidad').value;
+            fetch('/generar_pedidos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `cantidad=${cantidad}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('resultado-generacion').innerHTML = 
+                    `<strong>${data.mensaje}</strong>`;
+            });
+        }
+
+        function busquedaLineal() {
+            const repartidorId = document.getElementById('repartidor_id').value;
+            fetch('/busqueda_lineal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `repartidor_id=${repartidorId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                let html = `<strong>Pasos ejecutados: ${data.pasos}</strong><br>`;
+                html += `<strong>Pedidos encontrados: ${data.total_resultados}</strong><br>`;
+                html += '<strong>Resultados:</strong><ul>';
+                data.resultados.forEach(resultado => {
+                    html += `<li>${resultado}</li>`;
+                });
+                html += '</ul>';
+                document.getElementById('resultado-lineal').innerHTML = html;
+            });
+        }
+
+        function busquedaBinaria() {
+            const pedidoId = document.getElementById('pedido_id').value;
+            fetch('/busqueda_binaria', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `pedido_id=${pedidoId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                let html = `<strong>Pasos ejecutados: ${data.pasos}</strong><br>`;
+                html += `<strong>Resultado: ${data.resultado}</strong>`;
+                document.getElementById('resultado-binaria').innerHTML = html;
+            });
+        }
+
+        function ordenamientoBurbuja() {
+            fetch('/ordenamiento_burbuja', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                let html = `<strong>Pasos ejecutados: ${data.pasos}</strong><br>`;
+                html += `<strong>Total de pedidos ordenados: ${data.total_pedidos}</strong><br>`;
+                html += '<strong>Primeros 10 pedidos ordenados:</strong><ul>';
+                data.pedidos_ordenados.forEach(pedido => {
+                    html += `<li>${pedido}</li>`;
+                });
+                html += '</ul>';
+                document.getElementById('resultado-burbuja').innerHTML = html;
+            });
+        }
+
+        function ordenamientoInsercion() {
+            fetch('/ordenamiento_insercion', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                let html = `<strong>Pasos ejecutados: ${data.pasos}</strong><br>`;
+                html += `<strong>Total de pedidos ordenados: ${data.total_pedidos}</strong><br>`;
+                html += '<strong>Primeros 10 pedidos ordenados:</strong><ul>';
+                data.pedidos_ordenados.forEach(pedido => {
+                    html += `<li>${pedido}</li>`;
+                });
+                html += '</ul>';
+                document.getElementById('resultado-insercion').innerHTML = html;
+            });
+        }
+
+        // Generar pedidos al cargar la página
+        window.onload = generarPedidos;
+    </script>
+</body>
+</html>

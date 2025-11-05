@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparación de Algoritmos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #00c853;
+            text-align: center;
+        }
+        .graph {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin: 20px;
+            font-size: 1.2em;
+            color: #00c853;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Comparación de Algoritmos de Ordenamiento</h1>
+        
+        <div class="graph">
+            <img src="data:image/png;base64,{{ plot_url }}" alt="Gráfico de comparación">
+        </div>
+        
+        <p>Este gráfico muestra cómo los algoritmos de ordenamiento escalan con diferentes tamaños de datos. 
+        Se puede observar que el ordenamiento por inserción es consistentemente más eficiente que el 
+        ordenamiento burbuja, tanto en tiempo de ejecución como en número de pasos.</p>
+        
+        <a href="/" class="back-link">Volver al Inicio</a>
+    </div>
+</body>
+</html>
